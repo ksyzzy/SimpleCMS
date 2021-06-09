@@ -31,4 +31,6 @@ class ServiceInstanceRestController {
 			@PathVariable String applicationName) {
 		return this.discoveryClient.getInstances(applicationName);
 	}
+
+
 }
