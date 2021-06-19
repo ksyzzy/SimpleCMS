@@ -17,6 +17,9 @@ public class User extends BaseEntity {
     @JoinTable(name = "user_company", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "company_id"))
     private Set<Company> companies;
 
+    @OneToMany(mappedBy = "owner")
+    private Set<Company> ownedCompanies;
+
     @Column(name = "email")
     @Email(message = "Must be a valid e-mail address")
     @NotNull
@@ -113,5 +116,13 @@ public class User extends BaseEntity {
 
     public void setTransactions(Set<Product> transactions) {
         this.transactions = transactions;
+    }
+
+    public Set<Company> getOwnedCompanies() {
+        return ownedCompanies;
+    }
+
+    public void setOwnedCompanies(Set<Company> ownedCompanies) {
+        this.ownedCompanies = ownedCompanies;
     }
 }

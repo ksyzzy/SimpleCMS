@@ -14,8 +14,11 @@ import java.util.Set;
 @Table(name = "company")
 public class Company extends BaseEntity {
 
+    @ManyToOne(optional = false)
+    private User owner;
+
     @ManyToMany(mappedBy = "companies")
-    private Set<User> owners;
+    private Set<User> workers;
 
     @Column(name = "name")
     @NotNull
@@ -46,12 +49,12 @@ public class Company extends BaseEntity {
     @OneToMany(mappedBy = "ownedByCompany")
     private Set<Product> products;
 
-    public Set<User> getOwners() {
-        return owners;
+    public Set<User> getWorkers() {
+        return workers;
     }
 
-    public void setOwners(Set<User> owners) {
-        this.owners = owners;
+    public void setWorkers(Set<User> workers) {
+        this.workers = workers;
     }
 
     public String getName() {
@@ -100,5 +103,13 @@ public class Company extends BaseEntity {
 
     public void setProducts(Set<Product> products) {
         this.products = products;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }
