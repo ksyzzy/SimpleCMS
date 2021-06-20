@@ -17,7 +17,6 @@ public abstract class BaseEntity {
 
     @Column(name = "creation_date")
     @CreationTimestamp
-    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
 
