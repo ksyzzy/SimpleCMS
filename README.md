@@ -15,3 +15,4 @@ Simple headless CMS made with Spring and Angular in REST API and Microservices a
 11. JWT authentication and refresh tokens pattern
 12. Server-side rendered SEO-friendly frontend 
 13. Prefetching and lazy-loading techinques for the frontend
+14. Basic security measures: SQL injection prevention, User authentication and authorization, XSS protection, Brute force mitigation, Cross-site request forgery protection
