@@ -1,5 +1,5 @@
 # SimpleCMS
-Simple headless CMS made with Spring and Angular in REST API and Microservices architecture. A work in progress.
+Simple headless CMS made with Spring and Angular in REST API and Microservices architecture. Refer to the "develop" branch, the "master" branch is for release only. A work in progress.
 
 # Architecture
 1. Eureka server
