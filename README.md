@@ -3,12 +3,15 @@ Simple headless CMS made with Spring and Angular in REST API and Microservices a
 
 # Architecture
 1. Eureka server
-2. Microservices discovery clients
-3. REST API services
+2. Microservices discovery and registration pattern
+3. REST API
 4. Zuul proxy
 5. Ribbon load balancer
-6. Headless CMS
-7. Angular frontend
-8. JWT authentication and refresh tokens
-9. Server-side rendered SEO-friendly frontend 
-10. Prefetching and lazy-loading techinques for the frontend
+6. HTTPS channel security
+7. HTTP Request - Authentication manager - Authentication provider - Service - HTTP Response pattern
+8. Model - Repository - Service - Controller pattern for data access
+9. Headless CMS
+10. Decoupled Angular frontend
+11. JWT authentication and refresh tokens pattern
+12. Server-side rendered SEO-friendly frontend 
+13. Prefetching and lazy-loading techinques for the frontend
