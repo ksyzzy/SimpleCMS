@@ -33,8 +33,8 @@ public class Product extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(mappedBy = "transactions")
-    private Set<User> buyers;
+    @OneToMany(mappedBy = "product")
+    private Set<User_Product> transactions;
 
     public String getName() {
         return name;
@@ -84,11 +84,11 @@ public class Product extends BaseEntity {
         this.description = description;
     }
 
-    public Set<User> getBuyers() {
-        return buyers;
+    public Set<User_Product> getTransactions() {
+        return transactions;
     }
 
-    public void setBuyers(Set<User> buyers) {
-        this.buyers = buyers;
+    public void setTransactions(Set<User_Product> transactions) {
+        this.transactions = transactions;
     }
 }

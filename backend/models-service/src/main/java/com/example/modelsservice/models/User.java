@@ -1,8 +1,6 @@
 package com.example.modelsservice.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 
@@ -26,12 +24,8 @@ public class User extends BaseEntity {
     @NotNull
     private String password;
 
-    @ManyToMany
-    @JoinTable(name = "user_company", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "company_id"))
-    private Set<Company> companies;
-
-    @OneToMany(mappedBy = "owner")
-    private Set<Company> ownedCompanies;
+    @OneToMany(mappedBy = "user")
+    private Set<User_Company> companies;
 
     @Column(name = "email")
     @Email(message = "Must be a valid e-mail address")
@@ -63,10 +57,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "owner")
     private Set<Product> products;
 
-    @ManyToMany
-    @JoinTable(name = "user_product", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private Set<Product> transactions;
-
+    @OneToMany(mappedBy = "user")
+    private Set<User_Product> transactions;
 
     public String getEmail() {
         return email;
@@ -108,36 +100,12 @@ public class User extends BaseEntity {
         this.lastLogin = lastLogin;
     }
 
-    public Set<Company> getCompanies() {
-        return companies;
-    }
-
-    public void setCompanies(Set<Company> companies) {
-        this.companies = companies;
-    }
-
     public Set<Product> getProducts() {
         return products;
     }
 
     public void setProducts(Set<Product> products) {
         this.products = products;
-    }
-
-    public Set<Product> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(Set<Product> transactions) {
-        this.transactions = transactions;
-    }
-
-    public Set<Company> getOwnedCompanies() {
-        return ownedCompanies;
-    }
-
-    public void setOwnedCompanies(Set<Company> ownedCompanies) {
-        this.ownedCompanies = ownedCompanies;
     }
 
     public String getLogin() {
@@ -154,5 +122,21 @@ public class User extends BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<User_Product> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<User_Product> transactions) {
+        this.transactions = transactions;
+    }
+
+    public Set<User_Company> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(Set<User_Company> companies) {
+        this.companies = companies;
     }
 }

@@ -14,11 +14,8 @@ import java.util.Set;
 @Table(name = "company")
 public class Company extends BaseEntity {
 
-    @ManyToOne(optional = false)
-    private User owner;
-
-    @ManyToMany(mappedBy = "companies")
-    private Set<User> workers;
+    @OneToMany(mappedBy = "company")
+    private Set<User_Company> companies;
 
     @Column(name = "name")
     @NotNull
@@ -34,7 +31,7 @@ public class Company extends BaseEntity {
     @NotNull
     @Min(value = 10, message = "NIP must be exactly 10 digits long")
     @Max(value = 10, message = "NIP must be exactly 10 digits long")
-    private int nip;
+    private Integer nip;
 
     @Column(name = "type")
     @NotNull
@@ -48,14 +45,6 @@ public class Company extends BaseEntity {
 
     @OneToMany(mappedBy = "ownedByCompany")
     private Set<Product> products;
-
-    public Set<User> getWorkers() {
-        return workers;
-    }
-
-    public void setWorkers(Set<User> workers) {
-        this.workers = workers;
-    }
 
     public String getName() {
         return name;
@@ -73,11 +62,11 @@ public class Company extends BaseEntity {
         this.address = address;
     }
 
-    public int getNip() {
+    public Integer getNip() {
         return nip;
     }
 
-    public void setNip(int nip) {
+    public void setNip(Integer nip) {
         this.nip = nip;
     }
 
@@ -105,11 +94,11 @@ public class Company extends BaseEntity {
         this.products = products;
     }
 
-    public User getOwner() {
-        return owner;
+    public Set<User_Company> getCompanies() {
+        return companies;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setCompanies(Set<User_Company> companies) {
+        this.companies = companies;
     }
 }

@@ -7,6 +7,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class CompanyService {
 
-    @Autowired
     private CompanyRepository companyRepository;
+
+    public CompanyRepository getCompanyRepository() {
+        return companyRepository;
+    }
+
+    @Autowired
+    public void setCompanyRepository(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+    }
 }
