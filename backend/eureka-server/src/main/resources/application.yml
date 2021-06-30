@@ -1,5 +1,22 @@
 server:
   port: 8761
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: password123
+    key-store-type: PKCS12
+    key-alias: tomcat
+
+spring:
+  application:
+    name: eureka-server
+  security:
+    basic:
+      enabled: true
+    user:
+      name: admin
+      password: pass
+
 eureka:
   instance:
     hostname: localhost
@@ -7,6 +24,6 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     serviceUrl:
-      defaultZone : http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone : https://${eureka.instance.hostname}:${server.port}/eureka/
   server:
     eviction-interval-timer-in-m4s: 1000

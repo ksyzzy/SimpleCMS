@@ -1,0 +1,19 @@
+server:
+  port: 0
+spring:
+  application:
+    name: models-service
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/backend
+    username: dev
+    password: password
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.value}
