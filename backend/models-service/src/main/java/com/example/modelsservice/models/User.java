@@ -6,46 +6,47 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "user")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements Serializable {
 
     @Column(name = "login", unique = true)
-    @NotNull
+    @NotBlank
     private String login;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
+    @NotBlank
     @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
-    @NotNull
     private String password;
 
     @OneToMany(mappedBy = "user")
     private Set<User_Company> companies;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @Email(message = "Must be a valid e-mail address")
-    @NotNull
+    @NotBlank
     @Size(max = 100, message = "E-mail cannot be longer that 100 characters")
     private String email;
 
     @Column(name = "first_name")
-    @NotNull
+    @NotBlank
     @Size(max = 100, message = "First name cannot be longer than 100 characters")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotNull
+    @NotBlank
     @Size(max = 100, message = "Last name cannot be longer than 100 characters")
     private String lastName;
 
     @Column(name = "is_admin", nullable = false)
     @JsonProperty(value = "admin", access = JsonProperty.Access.READ_ONLY)
-    @NotNull
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean admin = false;
 

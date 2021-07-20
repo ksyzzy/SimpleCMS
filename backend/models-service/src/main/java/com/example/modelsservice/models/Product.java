@@ -3,16 +3,18 @@ package com.example.modelsservice.models;
 import com.example.modelsservice.enums.ProductType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "product")
-public class Product extends BaseEntity {
+public class Product extends BaseEntity implements Serializable {
 
     @Column(name = "name")
-    @NotNull
+    @NotBlank
     @Size(min = 1, max = 100, message = "Product name must be between 1 and 100 characters long")
     private String name;
 

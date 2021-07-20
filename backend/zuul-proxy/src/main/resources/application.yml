@@ -14,6 +14,7 @@ spring:
 eureka:
   instance:
     preferIpAddress: true
+    securePortEnabled: false
   client:
     registerWithEureka: true
     fetchRegistry: true

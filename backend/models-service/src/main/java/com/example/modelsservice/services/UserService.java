@@ -21,6 +21,9 @@ public class UserService {
     }
 
     public User addUser(User newUser) {
+        if (newUser.getPassword() == null || newUser.getPassword().isBlank()) {
+            throw new RuntimeException("Password cannot be empty");
+        }
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         return userRepository.save(newUser);
     }

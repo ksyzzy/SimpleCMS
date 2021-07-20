@@ -4,11 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "user_product")
-public class User_Product extends BaseEntity {
+public class User_Product extends BaseEntity implements Serializable {
 
     @ManyToOne(optional = false)
     private User user;
@@ -17,8 +17,7 @@ public class User_Product extends BaseEntity {
     private Product product;
 
     @Column(name = "amount")
-    @NotNull
-    private Integer amount;
+    private int amount;
 
     public User getUser() {
         return user;
@@ -36,11 +35,11 @@ public class User_Product extends BaseEntity {
         this.product = product;
     }
 
-    public Integer getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 }

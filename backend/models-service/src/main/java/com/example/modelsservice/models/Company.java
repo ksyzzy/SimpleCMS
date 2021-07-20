@@ -3,35 +3,32 @@ package com.example.modelsservice.models;
 import com.example.modelsservice.enums.CompanyType;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "company")
-public class Company extends BaseEntity {
+public class Company extends BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "company")
     private Set<User_Company> companies;
 
     @Column(name = "name")
-    @NotNull
+    @NotBlank
     @Size(max = 100, message = "Company name cannot exceed the limit of 100 characters")
     private String name;
 
     @Column(name = "address")
-    @NotNull
+    @NotBlank
     @Size(max = 100, message = "Address length cannot exceed 100 characters")
     private String address;
 
     @Column(name = "nip", unique = true)
-    @NotNull
     @Min(value = 10, message = "NIP must be exactly 10 digits long")
     @Max(value = 10, message = "NIP must be exactly 10 digits long")
-    private Integer nip;
+    private int nip;
 
     @Column(name = "type")
     @NotNull
@@ -62,11 +59,11 @@ public class Company extends BaseEntity {
         this.address = address;
     }
 
-    public Integer getNip() {
+    public int getNip() {
         return nip;
     }
 
-    public void setNip(Integer nip) {
+    public void setNip(int nip) {
         this.nip = nip;
     }
 
