@@ -13,12 +13,12 @@ public abstract class BaseEntity implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private long id;
+    protected long id;
 
     @Column(name = "creation_date")
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    private Date creationDate;
+    protected Date creationDate;
 
     public long getId() {
         return id;

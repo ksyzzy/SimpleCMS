@@ -6,7 +6,6 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -139,5 +138,12 @@ public class User extends BaseEntity implements Serializable {
 
     public void setCompanies(Set<User_Company> companies) {
         this.companies = companies;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", creationDate=" + creationDate + '}';
     }
 }
