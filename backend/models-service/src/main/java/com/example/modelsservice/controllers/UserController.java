@@ -1,16 +1,21 @@
 package com.example.modelsservice.controllers;
 
+import com.example.modelsservice.enums.ErrorCodes;
+import com.example.modelsservice.helpers.ResponseBuilder;
 import com.example.modelsservice.models.User;
 import com.example.modelsservice.services.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 public class UserController {
@@ -18,6 +23,8 @@ public class UserController {
     private UserService userService;
 
     private ObjectMapper mapper;
+
+    private ResponseBuilder responseBuilder;
 
     @GetMapping(value = "/user")
     public List<User> getAllUsers() {
@@ -28,18 +35,21 @@ public class UserController {
     public ResponseEntity<String> addUser(@RequestBody User newUser) {
         try {
             newUser = userService.addUser(newUser);
-            String json = mapper.writeValueAsString(newUser);
-            System.out.println(json);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(json);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("{\"message\": \"Could not parse\"}");
+            return responseBuilder.build(newUser, HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("{\"message\": \"User already exists\"}");
+            return responseBuilder.build(ErrorCodes.USER_ALREADY_EXISTS, HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getUserById(@PathVariable Long id) {
+        try {
+            User userById = userService.getUserById(id).orElseThrow();
+            return responseBuilder.build(userById, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            return responseBuilder.build(ErrorCodes.USER_DOES_NOT_EXIST, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -64,5 +74,14 @@ public class UserController {
     @Autowired
     public void setMapper(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    public ResponseBuilder getJsonBuilder() {
+        return responseBuilder;
+    }
+
+    @Autowired
+    public void setJsonBuilder(ResponseBuilder responseBuilder) {
+        this.responseBuilder = responseBuilder;
     }
 }

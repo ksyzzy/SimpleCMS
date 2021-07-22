@@ -1,6 +1,11 @@
 package com.example.modelsservice.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 
@@ -10,10 +15,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "user")
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class User extends BaseEntity implements Serializable {
 
     @Column(name = "login", unique = true)
@@ -23,10 +32,12 @@ public class User extends BaseEntity implements Serializable {
     @Column(name = "password", nullable = false)
     @NotBlank
     @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
+    @ToString.Exclude
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private Set<User_Company> companies;
+    @JsonProperty(value = "companies", access = JsonProperty.Access.WRITE_ONLY)
+    private Set<User_Company> companies = new HashSet<>();
 
     @Column(name = "email", unique = true)
     @Email(message = "Must be a valid e-mail address")
@@ -55,10 +66,12 @@ public class User extends BaseEntity implements Serializable {
     private Date lastLogin;
 
     @OneToMany(mappedBy = "owner")
-    private Set<Product> products;
+    @JsonProperty(value = "products", access = JsonProperty.Access.WRITE_ONLY)
+    private Set<Product> products = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<User_Product> transactions;
+    @JsonProperty(value = "transactions", access = JsonProperty.Access.WRITE_ONLY)
+    private Set<User_Product> transactions = new HashSet<>();
 
     public String getEmail() {
         return email;
@@ -140,10 +153,4 @@ public class User extends BaseEntity implements Serializable {
         this.companies = companies;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", creationDate=" + creationDate + '}';
-    }
 }
