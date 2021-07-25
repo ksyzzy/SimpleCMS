@@ -2,12 +2,14 @@ package com.example.modelsservice.services;
 
 import com.example.modelsservice.models.User;
 import com.example.modelsservice.repositories.UserRepository;
+import org.bouncycastle.openssl.PasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -25,17 +27,25 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User addUser(User newUser) {
-        if (newUser.getPassword() == null || newUser.getPassword().isBlank()) {
-            throw new RuntimeException("Password cannot be empty");
+    public User addUser(User user) throws PasswordException {
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            throw new PasswordException("Password cannot be blank");
         }
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        return userRepository.save(newUser);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    public User updateUser(User user) {
+        if (userRepository.findById(user.getId()).isPresent()) {
+            return userRepository.save(user);
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 
     public User setAdminPermissions(Long id) {
-        User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        user.setAdmin(true);
+        User user = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        user.setAdmin(!user.isAdmin());
         return userRepository.save(user);
     }
 
