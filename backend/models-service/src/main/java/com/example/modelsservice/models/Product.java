@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product")
-public class Product extends BaseEntity implements Serializable {
+public class Product extends BaseEntity implements Serializable, Eligible {
 
     @Column(name = "name")
     @NotBlank

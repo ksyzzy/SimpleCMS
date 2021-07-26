@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "user_product")
-public class User_Product extends BaseEntity implements Serializable {
+public class User_Product extends BaseEntity implements Serializable, Eligible {
 
     @ManyToOne(optional = false)
     private User user;

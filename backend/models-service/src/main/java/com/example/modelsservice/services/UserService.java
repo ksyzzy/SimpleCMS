@@ -1,8 +1,10 @@
 package com.example.modelsservice.services;
 
+import com.example.modelsservice.dto.UserDTO;
 import com.example.modelsservice.models.User;
 import com.example.modelsservice.repositories.UserRepository;
 import org.bouncycastle.openssl.PasswordException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -19,12 +22,20 @@ public class UserService {
 
     private PasswordEncoder passwordEncoder;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    private ModelMapper modelMapper;
+
+    public List<UserDTO> getAllUsers() {
+        List<User> userList = userRepository.findAll();
+        return userList.stream().map(this::convertToUserDTO).collect(Collectors.toList());
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public User getUserById(long id) {
+        return userRepository.findById(id).orElseThrow();
+    }
+
+    public UserDTO getUserDTOById(long id) {
+        User user = userRepository.findById(id).orElseThrow();
+        return convertToUserDTO(user);
     }
 
     public User addUser(User user) throws PasswordException {
@@ -49,6 +60,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public UserDTO convertToUserDTO(User user) {
+        return modelMapper.map(user, UserDTO.class);
+    }
+
     public UserRepository getUserRepository() {
         return userRepository;
     }
@@ -65,5 +80,14 @@ public class UserService {
     @Autowired
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public ModelMapper getModelMapper() {
+        return modelMapper;
+    }
+
+    @Autowired
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
     }
 }

@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "user_company")
-public class User_Company extends BaseEntity implements Serializable {
+public class User_Company extends BaseEntity implements Serializable, Eligible {
 
     @ManyToOne(optional = false)
     private User user;

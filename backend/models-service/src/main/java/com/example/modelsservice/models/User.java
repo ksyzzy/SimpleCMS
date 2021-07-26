@@ -1,8 +1,6 @@
 package com.example.modelsservice.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -23,7 +21,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class User extends BaseEntity implements Serializable {
+public class User extends BaseEntity implements Serializable, Eligible {
 
     @Column(name = "login", unique = true)
     @NotBlank
@@ -36,8 +34,8 @@ public class User extends BaseEntity implements Serializable {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    @JsonProperty(value = "companies", access = JsonProperty.Access.WRITE_ONLY)
-    private Set<User_Company> companies = new HashSet<>();
+    @JsonProperty(value = "companies", access = JsonProperty.Access.READ_ONLY)
+    private transient Set<User_Company> companies = new HashSet<>();
 
     @Column(name = "email", unique = true)
     @Email(message = "Must be a valid e-mail address")
@@ -66,12 +64,12 @@ public class User extends BaseEntity implements Serializable {
     private Date lastLogin;
 
     @OneToMany(mappedBy = "owner")
-    @JsonProperty(value = "products", access = JsonProperty.Access.WRITE_ONLY)
-    private Set<Product> products = new HashSet<>();
+    @JsonProperty(value = "products", access = JsonProperty.Access.READ_ONLY)
+    private transient Set<Product> products = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    @JsonProperty(value = "transactions", access = JsonProperty.Access.WRITE_ONLY)
-    private Set<User_Product> transactions = new HashSet<>();
+    @JsonProperty(value = "transactions", access = JsonProperty.Access.READ_ONLY)
+    private transient Set<User_Product> transactions = new HashSet<>();
 
     public String getEmail() {
         return email;
@@ -152,5 +150,4 @@ public class User extends BaseEntity implements Serializable {
     public void setCompanies(Set<User_Company> companies) {
         this.companies = companies;
     }
-
 }

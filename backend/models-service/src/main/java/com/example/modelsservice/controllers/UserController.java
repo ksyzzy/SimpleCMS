@@ -1,10 +1,16 @@
 package com.example.modelsservice.controllers;
 
+import com.example.modelsservice.configuration.SwaggerConfig;
+import com.example.modelsservice.dto.UserDTO;
 import com.example.modelsservice.enums.ErrorCode;
 import com.example.modelsservice.helpers.ResponseBuilder;
 import com.example.modelsservice.models.User;
 import com.example.modelsservice.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.bouncycastle.openssl.PasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,9 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 import java.util.NoSuchElementException;
 
+@Api(value = "User controller", tags = {SwaggerConfig.USER_TAG})
 @RestController
 public class UserController {
 
@@ -26,9 +32,13 @@ public class UserController {
 
     private ResponseBuilder responseBuilder;
 
-    @GetMapping(value = "/users")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    @ApiOperation(value = "Get list of all users from the database")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success|OK", response = UserDTO.class, responseContainer = "List")
+    })
+    @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getAllUsers() {
+        return responseBuilder.build(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,11 +54,16 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "Get user with provided id from database")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success|OK", response = UserDTO.class),
+            @ApiResponse(code = 404, message = "Not Found", response = String.class)
+    })
     @GetMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getUserById(@PathVariable Long id) {
+    public ResponseEntity<String> getUserById(@PathVariable long id) {
         try {
-            User userById = userService.getUserById(id).orElseThrow();
-            return responseBuilder.build(userById, HttpStatus.OK);
+            UserDTO user = userService.getUserDTOById(id);
+            return responseBuilder.build(user, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             e.printStackTrace();
             return responseBuilder.build(ErrorCode.USER_DOES_NOT_EXIST, HttpStatus.NOT_FOUND);
