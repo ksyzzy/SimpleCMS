@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import net.minidev.json.JSONObject;
 import org.bouncycastle.openssl.PasswordException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -70,11 +71,18 @@ public class UserController {
         }
     }
 
+    @DeleteMapping(value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> deleteUserById(@PathVariable long id, @RequestBody UserDTO providedUser) {
+        UserDTO user = userService.getUserDTOById(id);
+        String json = responseBuilder.getBuilder().buildJSON("message", String.valueOf(user.equals(providedUser)));
+        return responseBuilder.build(json, HttpStatus.OK);
+    }
+
     @PutMapping(value = "/users/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateUserById(@PathVariable long id, @RequestBody User updatedUser) {
+    public ResponseEntity<String> updateUserById(@PathVariable long id, @RequestBody User user) {
         try {
-            updatedUser = userService.updateUser(updatedUser);
-            return responseBuilder.build(updatedUser, HttpStatus.OK);
+            user = userService.updateUser(user);
+            return responseBuilder.build(user, HttpStatus.OK);
         } catch (NoSuchElementException | IllegalArgumentException e) {
             e.printStackTrace();
             return responseBuilder.build(ErrorCode.USER_DOES_NOT_EXIST, HttpStatus.NOT_FOUND);
@@ -82,7 +90,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/users/{id}/admin", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> setAdminForUser(@PathVariable Long id) {
+    public ResponseEntity<String> setAdminForUser(@PathVariable long id) {
         try {
             User user = userService.setAdminPermissions(id);
             return responseBuilder.build(user, HttpStatus.OK);
@@ -110,12 +118,12 @@ public class UserController {
         this.mapper = mapper;
     }
 
-    public ResponseBuilder getJsonBuilder() {
+    public ResponseBuilder getResponseBuilder() {
         return responseBuilder;
     }
 
     @Autowired
-    public void setJsonBuilder(ResponseBuilder responseBuilder) {
+    public void setResponseBuilder(ResponseBuilder responseBuilder) {
         this.responseBuilder = responseBuilder;
     }
 }

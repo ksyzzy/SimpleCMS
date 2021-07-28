@@ -2,7 +2,8 @@ package com.example.modelsservice.dto;
 
 import com.example.modelsservice.models.Eligible;
 
-import java.util.Date;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class UserDTO implements Eligible {
 
@@ -85,4 +86,33 @@ public class UserDTO implements Eligible {
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
     }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, creationDate, login, email, firstName, lastName, admin, lastLogin);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        UserDTO that = (UserDTO) object;
+        if (!(that.getCreationDate().compareTo(this.getCreationDate()) == 0) &&
+                !(that.getLastLogin().compareTo(this.lastLogin) == 0)) {
+            return false;
+        }
+        System.out.println(this.hashCode());
+        System.out.println(that.hashCode());
+        return id == that.getId() &&
+                login.equals(that.getLogin()) &&
+                email.equals(that.getEmail()) &&
+                firstName.equals(that.getFirstName()) &&
+                lastName.equals(that.getLastName()) &&
+                admin == that.isAdmin();
+     }
 }
